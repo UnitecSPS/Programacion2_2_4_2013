@@ -1,5 +1,4 @@
 
-import java.util.Calendar;
 
 /*
  * To change this template, choose Tools | Templates
@@ -12,7 +11,6 @@ import java.util.Calendar;
  */
 public class TestGit {
     public static void main(String[] args) {
-        Calendar c;
         System.out.println("HOLA");
     }
 }

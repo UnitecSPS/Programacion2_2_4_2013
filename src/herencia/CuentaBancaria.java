@@ -61,6 +61,11 @@ public class CuentaBancaria {
                 saldo);
          
     }
+
+    @Override
+    public String toString() {
+        return "CuentaBancaria{" + "numero=" + numero + ", cliente=" + cliente + ", saldo=" + saldo + ", apertura=" + apertura + '}';
+    }
     
     public void soy(){
         System.out.println("CUENTA BANCARIA");

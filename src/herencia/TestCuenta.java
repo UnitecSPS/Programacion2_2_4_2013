@@ -5,6 +5,7 @@
 package herencia;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -16,15 +17,16 @@ public class TestCuenta {
         cuentas.add(new CuentaBancaria(1,"Carlos"));
         cuentas.add(new CuentaAhorro(2,"Fabian",0.02));
         cuentas.add(new CuentaCheques(3,"Lilian"));
+        cuentas.add(new CuentaPlazoFijo(4,"Rfaa",new Date()));
         
         for(CuentaBancaria cb : cuentas){
             if( cb instanceof CuentaAhorro ){
                 ((CuentaAhorro)cb).registrarIntereses();
             }
             else if( cb instanceof CuentaCheques){
+                cb.retiro(30);
+                cb.retiro(50);
                 CuentaCheques ch = (CuentaCheques)cb;
-                ch.addCheque(1);
-                ch.addCheque(2);
                 ch.cantCheques();
             }
             cb.imprimir();

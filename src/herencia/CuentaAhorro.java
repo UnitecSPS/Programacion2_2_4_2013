@@ -9,7 +9,7 @@ package herencia;
  * @author Gotcha
  */
 public class CuentaAhorro extends CuentaBancaria {
-    private double tasa;
+    protected double tasa;
     
     public CuentaAhorro(int n, String c, double tas){
         super(n,c);
@@ -26,15 +26,20 @@ public class CuentaAhorro extends CuentaBancaria {
     }
     
     public void registrarIntereses(){
+        System.out.println("Registrar Int. en ahorro");
         deposito( tasa * saldo );
+    }
+    
+    @Override
+    public String toString(){
+        return super.toString() + " tasa=" + tasa;
     }
     
     //programacion incremental
     @Override
     public void imprimir(){
         System.out.println("\nDATOS CLIENTE\n-------");
-        super.imprimir();
-        System.out.println(" Tasa: "  + tasa);
+        System.out.println(this);
     }
 
     @Override

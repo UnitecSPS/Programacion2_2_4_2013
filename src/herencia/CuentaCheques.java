@@ -5,6 +5,7 @@
 package herencia;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -17,8 +18,22 @@ public class CuentaCheques extends CuentaBancaria {
         super(n,c);
         cheques = new ArrayList<>();
     }
+
+    private int numCheque(){
+        return cheques.isEmpty() ? 1 : (cheques.get(cheques.size()-1) + 1);
+    }
     
-    public void addCheque(int nc){
+    @Override
+    public boolean retiro(double monto) {
+
+        if( super.retiro(monto) ){
+            addCheque(numCheque());
+            return true;
+        }
+        return false;
+    }
+  
+    private void addCheque(int nc){
         cheques.add(nc);
     }
     

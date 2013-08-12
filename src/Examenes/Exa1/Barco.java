@@ -8,7 +8,7 @@ package Examenes.Exa1;
  *
  * @author Gotcha
  */
-public class Barco {
+public abstract class Barco {
         protected String nombre;
 
     public Barco(String nombre) {
@@ -24,11 +24,6 @@ public class Barco {
         return nombre;
     }
         
-    public void agregarElemento(){
-        System.out.println("SOY PAPA");
-    }
-    
-    public double vaciarCobrar(){
-        return 0;
-    }
+    public abstract void agregarElemento();
+    public abstract double vaciarCobrar();
 }

@@ -13,4 +13,9 @@ public final class Pollo extends Gallina {
     public void habla(){
         System.out.println("Pio Pio Pio");
     }
+    
+    public final void redundante(){
+        System.out.println("");
+    }
+    
 }

@@ -9,8 +9,9 @@ package Examenes.Exa1;
  * @author Gotcha
  */
 public abstract class Barco {
-        protected String nombre;
-
+    protected String nombre;
+    public static final int version = 123;
+    
     public Barco(String nombre) {
         this.nombre = nombre;
     }
@@ -20,7 +21,9 @@ public abstract class Barco {
         return "Barco{" + "nombre=" + nombre + '}';
     }
 
-    public String getNombre() {
+    public final String getNombre() {
+        final int x;
+        x = 2;
         return nombre;
     }
         

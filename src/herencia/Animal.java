@@ -21,6 +21,14 @@ public abstract class Animal {
     public String toString() {
         return "{" + "raza=" + raza + ", patas=" + patas + '}';
     }
+
+    public final String getRaza() {
+        return raza;
+    }
+
+    public final int getPatas() {
+        return patas;
+    }
     
     public abstract void habla();
 }

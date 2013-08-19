@@ -5,6 +5,7 @@
 package pruebas;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class UberSocial {
     
     static ArrayList<RedSocial> redes = new ArrayList<>();
-    
+   
     /*
      * 
      * 1- AgregarRed(TipoRed tipo)
@@ -34,10 +35,64 @@ public class UberSocial {
      *      = Imprime el listado de redes con el formato
      *      USER - TIPO DE RED
      * 
-     * 
+     *    
      * 
      */
     
+    public static RedSocial buscar(String u){
+        for(RedSocial rs : redes){
+            if( rs.user.equals(u))
+                return rs;
+        }
+        return null;
+    }
+    
+    public static void agregarRed(TipoRed red){
+        Scanner lea = new Scanner(System.in);
+        System.out.print("Ingrese Usuario: ");
+        String user = lea.next();
+        
+        if( buscar(user) == null ){
+            switch(red){
+                case FACEBOOK:
+                    redes.add(new Facebook(user));
+                    break;
+                case TWITTER:
+                    redes.add(new Twitter(user, false));
+            }
+        }
+    }
+    
+    public static void agregarPost(String user, String post){
+        RedSocial rs = buscar(user);
+        
+        if( rs != null )
+            rs.addPost(post);
+    }
+    
+    public static void agregarComentario(String user,int post,String com){
+        RedSocial rs = buscar(user);
+        if( rs instanceof Facebook){
+            ((Facebook)rs).addComment(new Comment(post,com));
+        }
+    }
+    
+    public static void imprimir(String user){
+        RedSocial rs = buscar(user);
+        
+        if( rs != null )
+            rs.imprimir();
+    }
+    
+    public static void listar(){
+        for(RedSocial rs : redes){
+            System.out.print("* User: " + rs.user);
+            if( rs instanceof Facebook)
+                System.out.println(" [FACEBOOK]");
+            else
+                System.out.println(" [TWITTER]");
+        }
+    }
     
     public static void main(String[] args) {
         

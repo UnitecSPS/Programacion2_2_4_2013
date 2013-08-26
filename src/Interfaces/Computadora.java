@@ -4,6 +4,8 @@
  */
 package Interfaces;
 
+import java.io.IOException;
+
 /**
  *
  * @author Gotcha
@@ -21,7 +23,7 @@ public class Computadora implements Interneteable  {
     }
 
     @Override
-    public void makeConection() {
+    public void makeConection()throws IOException {
         System.out.println("Compu Connected");
     }
 

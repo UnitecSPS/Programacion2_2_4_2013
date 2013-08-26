@@ -8,7 +8,7 @@ package Errores;
  *
  * @author Gotcha
  */
-public class PatitoException extends RuntimeException {
+public class PatitoException extends Exception {
     public PatitoException(){
         super("Patito Feo");
     }

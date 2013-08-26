@@ -19,12 +19,14 @@ public class Granja {
         }
     }
 
-    private static void aves() {
-        Scanner lea = new Scanner(System.in);
+    private static void aves()throws PatitoException, NullPointerException {
+        Scanner lea = null;
         String ave = lea.next();
         
-        if( !ave.equals("patito"))
-            throw new PatitoException();
+        if( !ave.equals("patito")){
+            PatitoException e = new PatitoException();
+            throw e;
+        }
         
     }
 }

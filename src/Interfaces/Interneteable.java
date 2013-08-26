@@ -4,6 +4,8 @@
  */
 package Interfaces;
 
+import java.io.IOException;
+
 /**
  *
  * @author Gotcha
@@ -14,6 +16,6 @@ public interface Interneteable {
     
     //funciones
     String getIp();
-    void makeConection();
+    void makeConection()throws IOException;
     void setIp(String ip);
 }

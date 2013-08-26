@@ -8,12 +8,10 @@ package Enum;
  *
  * @author Gotcha
  */
-public enum LINA {
-    VIDA(2), VICTORIA(1), OLIMPIA(23), MOTAGUA(13);
-    
-    int copas;
-    
-    LINA(int copas){
-        this.copas = copas;
+public class ClaseMia {
+    public enum Tipo{
+        A,B
     }
+    
+    Tipo tip;
 }

@@ -7,6 +7,7 @@ package binario;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -59,7 +60,7 @@ public class SuperMarket {
         return getCodigo(4);
     }
    
-    private void addProducto()throws IOException{
+    public void addProducto()throws IOException{
         productos.seek( productos.length() );
         
         //nombre
@@ -78,6 +79,7 @@ public class SuperMarket {
         System.out.println("Tipo: ");
         TipoProducto tp = TipoProducto.valueOf(lea.next().toUpperCase());
         
+        
         //a escribir
         productos.writeInt(getNewCodProducto());
         productos.writeUTF(nom);
@@ -85,6 +87,82 @@ public class SuperMarket {
         productos.writeDouble(precc);
         productos.writeInt(cant);
         productos.writeUTF(tp.name());
+    }
+    
+    public void inventario()throws IOException{
+        productos.seek(0);
+        System.out.println("\n\nINVENTARIO\n----------");
+        while(productos.getFilePointer() < productos.length()){
+            int cod = productos.readInt();
+            String n = productos.readUTF();
+            double pv = productos.readDouble();
+            double pc = productos.readDouble();
+            int cant = productos.readInt();
+            String tipo = productos.readUTF();
+            
+            System.out.printf("%d- %s Venta: Lps. %.2f Compra %.2f Cantidad: %d - %s\n",
+                    cod,n,pv,pc,cant,tipo);
+        }
+    }
+    
+    public boolean search(int cod)throws IOException{
+        productos.seek(0);
+        
+        while(productos.getFilePointer() < productos.length()){
+            int code = productos.readInt();
+            long pos = productos.getFilePointer();
+            productos.readUTF();
+            productos.seek(productos.getFilePointer()+16);
+            int cant = productos.readInt();
+            productos.readUTF();
+            
+            if(code==cod && cant > 0){
+                productos.seek(pos);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public void generarCompra()throws IOException{
+        ArrayList<LineItem> items = new ArrayList<>();
+        char resp;
+        System.out.println("Cliente: ");
+        String cli = lea.next();
+        
+        do{
+            System.out.println("Codigo producto: ");
+            int cp = lea.nextInt();
+            
+            if(search(cp)){
+                System.out.println(productos.readUTF());
+                double pv = productos.readDouble();
+                productos.readDouble();
+                System.out.println("Cantidad: ");
+                int cant = lea.nextInt();
+                int cap = productos.readInt();
+                if(cant <= cap){
+                    //continuar
+                    items.add(new LineItem(cp, cant, pv));
+                }
+                else
+                    System.out.println("SOLO TENEMOS " + cap);
+            }
+            else{
+                System.out.println("Producto no existe o agotado");
+            }
+            
+            System.out.print("Quiere otro? (s/n): ");
+            resp = lea.next().charAt(0);
+        }while(resp == 's');
+        
+        if( items.size() > 0)
+            crearFactura(cli, items);
+    }
+
+    private void crearFactura(String cli, ArrayList<LineItem> items) {
+        
     }
     
 }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -33,7 +34,7 @@ public class SuperMarket {
     }
 
     private void creardirs() {
-        File f = new File("supermarket/facturas");
+        File f = new File(dirfactura);
         f.mkdirs();
     }
 
@@ -130,6 +131,7 @@ public class SuperMarket {
         char resp;
         System.out.println("Cliente: ");
         String cli = lea.next();
+        double st = 0;
         
         do{
             System.out.println("Codigo producto: ");
@@ -142,8 +144,9 @@ public class SuperMarket {
                 System.out.println("Cantidad: ");
                 int cant = lea.nextInt();
                 int cap = productos.readInt();
-                if(cant <= cap){
+                if(cant <= cap && noEstaEnItems(items,cp)){
                     //continuar
+                    st = st + (cant * pv);
                     items.add(new LineItem(cp, cant, pv));
                 }
                 else
@@ -158,11 +161,82 @@ public class SuperMarket {
         }while(resp == 's');
         
         if( items.size() > 0)
-            crearFactura(cli, items);
+            crearFactura(cli, st, items);
     }
 
-    private void crearFactura(String cli, ArrayList<LineItem> items) {
+    private void crearFactura(String cli, double st, ArrayList<LineItem> items)throws IOException {
+        int codfact = getNewCodFactura();
+        String filename = dirfactura + "/Factura#" + codfact + ".smk";
+        RandomAccessFile rFa = new RandomAccessFile(filename,"rw");
+        
+        //codigo
+        rFa.writeInt(codfact);
+        //fecha
+        rFa.writeLong(new Date().getTime());
+        //st
+        System.out.println("Subtotal: " + st);
+        rFa.writeDouble(st);
+        //impuesto
+        double imp = st * 0.12;
+        System.out.println("Impuesto: " + imp);
+        rFa.writeDouble(imp);
+        //descuento
+        double desc = st > 10000 ? st * 0.04 : 0;
+        System.out.println("Descuento: " + desc);
+        rFa.writeDouble(desc);
+        //line items
+        for(LineItem li : items){
+            rFa.writeInt(li.codprod);
+            rFa.writeInt(li.cantprod);
+            rFa.writeDouble(li.precprod);
+            rebajarInventario(li.codprod, li.cantprod);
+        }
+        
+        double tp = st + imp - desc;
+        System.out.println("Total Pagar: " + tp);
         
     }
     
+    
+
+    private void rebajarInventario(int codprod, int cantprod)throws IOException {
+        if( search(codprod)){
+            productos.readUTF();
+            productos.seek(productos.getFilePointer()+16);
+            int cant = productos.readInt();
+            productos.seek(productos.getFilePointer()-4);
+            productos.writeInt(cant - cantprod);
+        }
+        
+    }
+
+    private boolean noEstaEnItems(ArrayList<LineItem> items, int cp) {
+        for(LineItem li : items){
+            if( li.codprod == cp ){
+                System.out.println("Producto ya esta agregado");
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public void comprar(int cp, int cant)throws IOException{
+        productos.seek(0);
+   
+        
+        while(productos.getFilePointer() < productos.length()){
+            int cod = productos.readInt();
+            productos.readUTF();
+            productos.seek(productos.getFilePointer()+16);
+            long pos = productos.getFilePointer();
+            int cantp = productos.readInt();
+            productos.readUTF();
+            
+            if(cod == cp){
+                productos.seek(pos);
+                productos.writeInt(cant+cantp);
+                break;
+            }
+        }
+    }
 }
